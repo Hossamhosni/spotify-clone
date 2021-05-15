@@ -17,6 +17,7 @@ export default function useAuth(code) {
 				setRefreshToken(response.data.refreshToken);
 				setExpiresIn(response.data.expiresIn);
 			} catch (e) {
+				console.log(e);
 				window.location = "/";
 			}
 		}
@@ -35,11 +36,12 @@ export default function useAuth(code) {
 				setAccessToken(response.data.accessToken);
 				setExpiresIn(response.data.expiresIn);
 			} catch (e) {
+				console.log(e);
 				window.location = "/";
 			}
 		}
 		if (!refreshToken || !expiresIn) return;
-		const interval = setInterval(() => refresh);
+		const interval = setInterval(refresh, (expiresIn - 60) * 1000);
 		return () => clearInterval(interval);
 	}, [refreshToken, expiresIn]);
 

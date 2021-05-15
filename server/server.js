@@ -22,19 +22,21 @@ app.post("/login", async (req, res) => {
 
 	try {
 		const response = await spotifyApi.authorizationCodeGrant(code);
+
 		res.json({
 			accessToken: response.body.access_token,
 			refreshToken: response.body.refresh_token,
 			expiresIn: response.body.expires_in,
 		});
 	} catch (e) {
+		console.log("ERROR AT LOGIN", e);
 		res.sendStatus(400);
 	}
 });
 
 app.post("/refresh", async (req, res) => {
 	const refreshToken = req.body.refreshToken;
-	const spotifyApi = new SpotifyWebApi({
+	const spotifyApi = new SpotifyApi({
 		redirectUri: process.env.REDIRECT_URI,
 		clientId: process.env.CLIENT_ID,
 		clientSecret: process.env.CLIENT_SECRET,
@@ -48,7 +50,6 @@ app.post("/refresh", async (req, res) => {
 			expiresIn: data.body.expiresIn,
 		});
 	} catch (e) {
-		console.log(e);
 		res.sendStatus(400);
 	}
 });
