@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import useAuth from "./useAuth";
 import Player from "./Player";
-import TrackSearchResult from "./TrackSearchResult";
+import Artists from "./artists/Artists";
+import Songs from "./songs/Songs";
 import { Container, Form } from "react-bootstrap";
 import SpotifyWebApi from "spotify-web-api-node";
 import axios from "axios";
@@ -11,7 +12,6 @@ const spotifyApi = new SpotifyWebApi({
 });
 export default function Dashboard({ code }) {
 	const accessToken = useAuth(code);
-	console.log(accessToken);
 	spotifyApi.setAccessToken(accessToken);
 	const [searchQuery, setSearchQuery] = useState("");
 	const [searchTrackResults, setSearchTrackResults] = useState([]);
@@ -63,9 +63,11 @@ export default function Dashboard({ code }) {
 
 		async function search() {
 			const searchTracksRes = await spotifyApi.searchTracks(searchQuery);
-
+			const searchArtistsRes = await spotifyApi.searchArtists(
+				searchQuery
+			);
 			setSearchTrackResults(
-				searchTracksRes.body.tracks.items.map((track) => {
+				searchTracksRes.body.tracks.items.slice(0, 3).map((track) => {
 					const smallestAlbumImage = track.album.images.reduce(
 						(smallest, image) => {
 							if (image.height < smallest.height) return image;
@@ -80,6 +82,18 @@ export default function Dashboard({ code }) {
 						albumUrl: smallestAlbumImage.url,
 					};
 				})
+			);
+
+			setSearchArtistResults(
+				searchArtistsRes.body.artists.items
+					.slice(0, 3)
+					.map((artist) => {
+						return {
+							name: artist.name,
+							uri: artist.uri,
+							image: artist.images[0]?.url,
+						};
+					})
 			);
 		}
 		search();
@@ -96,20 +110,12 @@ export default function Dashboard({ code }) {
 				value={searchQuery}
 				onChange={(e) => setSearchQuery(e.target.value)}
 			/>
-			<div className="flex-grow-1 my-2" style={{ overflowY: "auto" }}>
-				{searchTrackResults.map((track) => (
-					<TrackSearchResult
-						track={track}
-						key={track.uri}
-						chooseTrack={chooseTrack}
-					/>
-				))}
-				{searchTrackResults.length === 0 && (
-					<div className="text-center" style={{ whiteSpace: "pre" }}>
-						{lyrics}
-					</div>
-				)}
-			</div>
+			<Artists artists={searchArtistResults} />
+			<Songs
+				songs={searchTrackResults}
+				chooseTrack={chooseTrack}
+				lyrics={lyrics}
+			/>
 			<div>
 				<Player
 					accessToken={accessToken}
