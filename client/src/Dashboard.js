@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import useAuth from "./useAuth";
 import Player from "./Player";
 import Artists from "./artists/Artists";
-import Songs from "./songs/Songs";
+import Tracks from "./Tracks/Tracks";
 import { Container, Form } from "react-bootstrap";
 import SpotifyWebApi from "spotify-web-api-node";
 import axios from "axios";
@@ -111,8 +111,8 @@ export default function Dashboard({ code }) {
 				onChange={(e) => setSearchQuery(e.target.value)}
 			/>
 			<Artists artists={searchArtistResults} />
-			<Songs
-				songs={searchTrackResults}
+			<Tracks
+				tracks={searchTrackResults}
 				chooseTrack={chooseTrack}
 				lyrics={lyrics}
 			/>

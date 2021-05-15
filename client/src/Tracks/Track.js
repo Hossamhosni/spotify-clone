@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function TrackSearchResult({ track, chooseTrack }) {
+export default function Track({ track, chooseTrack }) {
 	function handlePlay() {
 		chooseTrack(track);
 	}
@@ -12,6 +12,7 @@ export default function TrackSearchResult({ track, chooseTrack }) {
 			onClick={handlePlay}
 		>
 			<img
+				alt={track.title}
 				src={track.albumUrl}
 				style={{ height: "64px", width: "64px" }}
 			/>
