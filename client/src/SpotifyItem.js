@@ -1,19 +1,20 @@
 import React from "react";
+import { Card } from "react-bootstrap";
 
 export default function SpotifyItem({ item }) {
 	return (
-		<div
-			className="d-flex m-2 align-items-center"
-			style={{ cursor: "pointer" }}
-		>
-			<img
-				alt={item.name}
+		<Card style={{ backgroundColor: "#282828", color: "white" }}>
+			<Card.Img
+				variant="top"
+				style={{
+					width: "100%",
+					height: "10vw",
+					justifyContent: "center",
+					alignItems: "center",
+				}}
 				src={item.image}
-				style={{ height: "64px", width: "64px" }}
 			/>
-			<div className="ml-3">
-				<div>{item.name}</div>
-			</div>
-		</div>
+			<Card.Header>{item.name}</Card.Header>
+		</Card>
 	);
 }

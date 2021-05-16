@@ -1,4 +1,5 @@
 import React from "react";
+import { Card } from "react-bootstrap";
 
 export default function Track({ track, chooseTrack }) {
 	function handlePlay() {
@@ -6,20 +7,26 @@ export default function Track({ track, chooseTrack }) {
 	}
 
 	return (
-		<div
-			className="d-flex m-2 align-items-center"
-			style={{ cursor: "pointer" }}
+		<Card
+			style={{
+				backgroundColor: "#282828",
+				color: "white",
+				cursor: "pointer",
+			}}
 			onClick={handlePlay}
 		>
-			<img
-				alt={track.title}
+			<Card.Img
+				variant="top"
+				style={{
+					width: "100%",
+					height: "10vw",
+					justifyContent: "center",
+					alignItems: "center",
+				}}
 				src={track.albumUrl}
-				style={{ height: "64px", width: "64px" }}
 			/>
-			<div className="ml-3">
-				<div>{track.title}</div>
-				<div className="text-muted">{track.artist}</div>
-			</div>
-		</div>
+			<Card.Header>{track.title}</Card.Header>
+			<Card.Body className="text-muted">{track.artist}</Card.Body>
+		</Card>
 	);
 }

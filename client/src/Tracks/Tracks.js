@@ -1,6 +1,6 @@
 import React from "react";
 import Track from "./Track";
-import { Container } from "react-bootstrap";
+import { Container, Col, Row } from "react-bootstrap";
 
 export default function Tracks({ tracks, chooseTrack, lyrics }) {
 	return (
@@ -8,21 +8,31 @@ export default function Tracks({ tracks, chooseTrack, lyrics }) {
 			className="d-flex flex-column py-2"
 			style={{ height: "100vh" }}
 		>
-			<h2>Songs</h2>
-			<div className="flex-grow-1 my-2" style={{ overflowY: "auto" }}>
-				{tracks.map((track) => (
-					<Track
-						track={track}
-						key={track.uri}
-						chooseTrack={chooseTrack}
-					/>
-				))}
-				{tracks.length === 0 && (
-					<div className="text-center" style={{ whiteSpace: "pre" }}>
-						{lyrics}
-					</div>
-				)}
-			</div>
+			<Container
+				className="flex-grow-1 my-2"
+				style={{ overflowY: "auto" }}
+			>
+				<h2>Songs</h2>
+				<Row>
+					{tracks.map((track) => (
+						<Col>
+							<Track
+								track={track}
+								key={track.uri}
+								chooseTrack={chooseTrack}
+							/>
+						</Col>
+					))}
+					{/* {tracks.length === 0 && (
+						<div
+							className="text-center"
+							style={{ whiteSpace: "pre" }}
+						>
+							{lyrics}
+						</div>
+					)} */}
+				</Row>
+			</Container>
 		</Container>
 	);
 }

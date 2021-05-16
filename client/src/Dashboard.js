@@ -1,13 +1,11 @@
 import { useState, useEffect } from "react";
 import useAuth from "./useAuth";
 import Player from "./Player";
-import Artists from "./Artists";
 import Tracks from "./Tracks/Tracks";
-import { Container, Form } from "react-bootstrap";
+import { Container, Form, Row } from "react-bootstrap";
 import SpotifyWebApi from "spotify-web-api-node";
 import axios from "axios";
-import Albums from "./Albums";
-import Playlists from "./Playlists";
+import SpotifyItemList from "./SpotifyItemList";
 
 const spotifyApi = new SpotifyWebApi({
 	clientId: "ccb8ead5296c45a980f01802be9fb2e5",
@@ -75,7 +73,7 @@ export default function Dashboard({ code }) {
 				searchQuery
 			);
 			setSearchTrackResults(
-				searchTracksRes.body.tracks.items.slice(0, 3).map((track) => {
+				searchTracksRes.body.tracks.items.slice(0, 6).map((track) => {
 					const smallestAlbumImage = track.album.images.reduce(
 						(smallest, image) => {
 							if (image.height < smallest.height) return image;
@@ -88,41 +86,45 @@ export default function Dashboard({ code }) {
 						title: track.name,
 						uri: track.uri,
 						albumUrl: smallestAlbumImage.url,
+						id: track.id,
 					};
 				})
 			);
 
 			setSearchArtistResults(
 				searchArtistsRes.body.artists.items
-					.slice(0, 3)
+					.slice(0, 6)
 					.map((artist) => {
 						return {
 							name: artist.name,
 							uri: artist.uri,
 							image: artist.images[0]?.url,
+							id: artist.id,
 						};
 					})
 			);
 
 			setSearchAlbumResults(
 				searchAlbumResults.body.albums.items
-					.slice(0, 3)
+					.slice(0, 6)
 					.map((album) => {
 						return {
 							name: album.name,
 							uri: album.uri,
 							image: album.images[0]?.url,
+							id: album.id,
 						};
 					})
 			);
 			setSearchPlaylistResults(
 				searchPlaylistResults.body.playlists.items
-					.slice(0, 3)
+					.slice(0, 6)
 					.map((playlist) => {
 						return {
 							name: playlist.name,
 							uri: playlist.uri,
 							image: playlist.images[0]?.url,
+							id: playlist.id,
 						};
 					})
 			);
@@ -141,14 +143,17 @@ export default function Dashboard({ code }) {
 				value={searchQuery}
 				onChange={(e) => setSearchQuery(e.target.value)}
 			/>
-			<Artists artists={searchArtistResults} />
+			<SpotifyItemList items={searchArtistResults} itemName="Artists" />
 			<Tracks
 				tracks={searchTrackResults}
 				chooseTrack={chooseTrack}
 				lyrics={lyrics}
 			/>
-			<Albums albums={searchAlbumResults} />
-			<Playlists playlists={searchPlaylistResults} />
+			<SpotifyItemList items={searchAlbumResults} itemName="Albums" />
+			<SpotifyItemList
+				items={searchPlaylistResults}
+				itemName="Playlists"
+			/>
 			<div>
 				<Player
 					accessToken={accessToken}
