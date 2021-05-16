@@ -17,7 +17,6 @@ export default function useAuth(code) {
 				setRefreshToken(response.data.refreshToken);
 				setExpiresIn(response.data.expiresIn);
 			} catch (e) {
-				console.log(e);
 				window.location = "/";
 			}
 		}
@@ -36,7 +35,7 @@ export default function useAuth(code) {
 				setAccessToken(response.data.accessToken);
 				setExpiresIn(response.data.expiresIn);
 			} catch (e) {
-				console.log(e);
+				// console.log(e);
 				window.location = "/";
 			}
 		}

@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import useAuth from "./useAuth";
 import Player from "./Player";
-import Artists from "./artists/Artists";
+import Artists from "./Artists";
 import Tracks from "./Tracks/Tracks";
 import { Container, Form } from "react-bootstrap";
 import SpotifyWebApi from "spotify-web-api-node";
 import axios from "axios";
+import Albums from "./Albums";
+import Playlists from "./Playlists";
 
 const spotifyApi = new SpotifyWebApi({
 	clientId: "ccb8ead5296c45a980f01802be9fb2e5",
@@ -66,6 +68,12 @@ export default function Dashboard({ code }) {
 			const searchArtistsRes = await spotifyApi.searchArtists(
 				searchQuery
 			);
+			const searchAlbumResults = await spotifyApi.searchAlbums(
+				searchQuery
+			);
+			const searchPlaylistResults = await spotifyApi.searchPlaylists(
+				searchQuery
+			);
 			setSearchTrackResults(
 				searchTracksRes.body.tracks.items.slice(0, 3).map((track) => {
 					const smallestAlbumImage = track.album.images.reduce(
@@ -95,6 +103,29 @@ export default function Dashboard({ code }) {
 						};
 					})
 			);
+
+			setSearchAlbumResults(
+				searchAlbumResults.body.albums.items
+					.slice(0, 3)
+					.map((album) => {
+						return {
+							name: album.name,
+							uri: album.uri,
+							image: album.images[0]?.url,
+						};
+					})
+			);
+			setSearchPlaylistResults(
+				searchPlaylistResults.body.playlists.items
+					.slice(0, 3)
+					.map((playlist) => {
+						return {
+							name: playlist.name,
+							uri: playlist.uri,
+							image: playlist.images[0]?.url,
+						};
+					})
+			);
 		}
 		search();
 	}, [searchQuery, accessToken]);
@@ -106,7 +137,7 @@ export default function Dashboard({ code }) {
 		>
 			<Form.Control
 				type="search"
-				placeholder="Search Songs/Artists"
+				placeholder="Search"
 				value={searchQuery}
 				onChange={(e) => setSearchQuery(e.target.value)}
 			/>
@@ -116,6 +147,8 @@ export default function Dashboard({ code }) {
 				chooseTrack={chooseTrack}
 				lyrics={lyrics}
 			/>
+			<Albums albums={searchAlbumResults} />
+			<Playlists playlists={searchPlaylistResults} />
 			<div>
 				<Player
 					accessToken={accessToken}
