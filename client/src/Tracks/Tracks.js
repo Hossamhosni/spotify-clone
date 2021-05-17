@@ -23,14 +23,14 @@ export default function Tracks({ tracks, chooseTrack, lyrics }) {
 							/>
 						</Col>
 					))}
-					{/* {tracks.length === 0 && (
+					{tracks.length === 0 && (
 						<div
 							className="text-center"
 							style={{ whiteSpace: "pre" }}
 						>
 							{lyrics}
 						</div>
-					)} */}
+					)}
 				</Row>
 			</Container>
 		</Container>

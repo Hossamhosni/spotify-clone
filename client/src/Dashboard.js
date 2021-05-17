@@ -23,7 +23,7 @@ export default function Dashboard({ code }) {
 
 	function chooseTrack(track) {
 		setPlayingTrack(track);
-		setSearchQuery("");
+		// setSearchQuery("");
 		setLyrics("");
 	}
 
