@@ -23,7 +23,7 @@ export default function Dashboard({ code }) {
 
 	function chooseTrack(track) {
 		setPlayingTrack(track);
-		// setSearchQuery("");
+		setSearchQuery("");
 		setLyrics("");
 	}
 
@@ -75,9 +75,9 @@ export default function Dashboard({ code }) {
 			setSearchTrackResults(
 				searchTracksRes.body.tracks.items.slice(0, 6).map((track) => {
 					const smallestAlbumImage = track.album.images.reduce(
-						(smallest, image) => {
-							if (image.height < smallest.height) return image;
-							return smallest;
+						(biggest, image) => {
+							if (image.height > biggest.height) return image;
+							return biggest;
 						},
 						track.album.images[0]
 					);
@@ -143,17 +143,30 @@ export default function Dashboard({ code }) {
 				value={searchQuery}
 				onChange={(e) => setSearchQuery(e.target.value)}
 			/>
-			<SpotifyItemList items={searchArtistResults} itemName="Artists" />
-			<Tracks
-				tracks={searchTrackResults}
-				chooseTrack={chooseTrack}
-				lyrics={lyrics}
-			/>
-			<SpotifyItemList items={searchAlbumResults} itemName="Albums" />
-			<SpotifyItemList
-				items={searchPlaylistResults}
-				itemName="Playlists"
-			/>
+			{searchArtistResults.length > 0 ? (
+				<SpotifyItemList
+					items={searchArtistResults}
+					itemName="Artists"
+				/>
+			) : null}
+			{searchTrackResults.length > 0 ? (
+				<Tracks
+					tracks={searchTrackResults}
+					chooseTrack={chooseTrack}
+					lyrics={lyrics}
+				/>
+			) : null}
+			{searchAlbumResults.length > 0 ? (
+				<SpotifyItemList items={searchAlbumResults} itemName="Albums" />
+			) : null}
+
+			{searchPlaylistResults.length > 0 ? (
+				<SpotifyItemList
+					items={searchPlaylistResults}
+					itemName="Playlists"
+				/>
+			) : null}
+
 			<div>
 				<Player
 					accessToken={accessToken}
